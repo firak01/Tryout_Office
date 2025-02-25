@@ -44,7 +44,7 @@ public class OfficeSearchZZZ{
         if (args.length <= 1) {        	 
                  System.out.println("Usage: OfficeSearchZZZ <directory> <search_term> [...]");
              }else {
-        	
+        	//Z.B. als Argument: "C:\1fgl\tempfgl\20250224Warnings im Log NO StyleElement found - P_1\20250219odtJavaTest" "P_1"
             for (int i=1; i<args.length; i++) {
                 searchSet.add(args[i].toLowerCase());
             }
@@ -65,11 +65,13 @@ public class OfficeSearchZZZ{
                         // Sortiere die Dateien alphabetisch
                         Arrays.sort(files);
 
+                        //Auf der Suche nach der Ursache fuer die Log Meldung in HISinOne
+                        //WARN: NO styleElement found for styleName=P_1 (element 'p')
                         for (File file : files) {
                             if (isOdt(file)) {
                                 //searchContentBodyText(file);
-                            	//searchContentStyle(file);
-                            	searchStylesStyle(file, false, false);
+                            	searchContentAutomatic_styles(file);
+                            	//searchStylesStyle(file, false, false);
                             }
                         }
                     } else {
@@ -182,24 +184,24 @@ public class OfficeSearchZZZ{
 	                    				}
 		                                
 		                                if(bFoundAtElement) {
-		                                	System.out.print("\n!!! " + odt.toString() + " : !!! Attribut: " + sAttributeName + "\t| Wert: " + sAttributeValue +" | found: " + p);
+		                                	System.out.print("\n!!! " + odt.getName().toString() + " : !!! Attribut: " + sAttributeName + "\t| Wert: " + sAttributeValue +" | found: " + p);
 		                                	bFoundAtElement=false;
 		                                }else {
-		                                	System.out.print("\n" + odt.toString() + " : Attribut: " + sAttributeName + "\t| Wert: " + sAttributeValue + " | but searched for: " + p);
+		                                	System.out.print("\n" + odt.getName().toString() + " : Attribut: " + sAttributeName + "\t| Wert: " + sAttributeValue + " | but searched for: " + p);
 		                                }
 		                            }//end for
                     			}//if(sAttributeName.equals("name")) {                    			                    		
                     		}//end for                    		                    		                     
                     }
                 }else{
-                	System.out.println("\n" + odt.toString() + " enthält keinen Knoten 'automatic-styles'.");                	
+                	System.out.println("\n" + odt.getName().toString() + " enthält keinen Knoten 'automatic-styles'.");                	
                 }//end if "Knoten in Struktur" gefunden.
                 
                 if(bFoundAtFile) {
-                	System.out.println("\n!!!" + odt.toString() + " enthält gesuchte(s) Attribut(e).");
+                	System.out.println("\n!!!" + odt.getName().toString() + " enthält gesuchte(s) Attribut(e).");
                 }
             }else {
-            	System.out.println("\n" + odt.toString() + " enthält keine Datei 'content.xml'.");
+            	System.out.println("\n" + odt.getName().toString() + " enthält keine Datei 'content.xml'.");
             }//end if content!=null, d.h. "Datei" gefunden.
         }
         catch (IOException | JDOMException e) {
@@ -208,7 +210,7 @@ public class OfficeSearchZZZ{
     }
 
     
-    private void searchContentStyle(File odt) {
+    private void searchContentAutomatic_styles(File odt) {
         try (ZipFile zip = new ZipFile(odt)) {
             final ZipEntry content = zip.getEntry("content.xml");
             if (content != null) {
@@ -240,10 +242,10 @@ public class OfficeSearchZZZ{
 		                                
 		                                String sValue = objAttribute.getValue();
 		                                if(bFoundAtElement) {
-		                                	System.out.print("\n" + odt.toString() + " : !!! Attribut: " + sAttributeName + "\t| Wert: " + sValue);
+		                                	System.out.print("\n" + odt.getName().toString() + " : !!! Attribut: " + sAttributeName + "\t| Wert: " + sValue);
 		                                	bFoundAtElement=false;
 		                                }else {
-		                                	System.out.print("\n" + odt.toString() + " : Attribut: " + sAttributeName + "\t| Wert: " + sValue);
+		                                	System.out.print("\n" + odt.getName().toString() + " : Attribut: " + sAttributeName + "\t| Wert: " + sValue);
 		                                }
 		                            }
                     			}
@@ -255,14 +257,14 @@ public class OfficeSearchZZZ{
                      
                     }
                 }else{
-                	System.out.println("\n" + odt.toString() + " enthält keinen Knoten 'automatic-styles'.");                	
+                	System.out.println("\n" + odt.getName().toString() + " enthält keinen Knoten 'automatic-styles'.");                	
                 }//end if "Knoten in Struktur" gefunden.
                 
                 if(bFoundAtFile) {
-                	System.out.println("\n!!!" + odt.toString() + " enthält gesuchte(s) Attribut(e).");
+                	System.out.println("\n!!!" + odt.getName().toString() + " enthält gesuchte(s) Attribut(e).");
                 }
             }else {
-            	System.out.println("\n" + odt.toString() + " enthält keine Datei 'content.xml'.");
+            	System.out.println("\n" + odt.getName().toString() + " enthält keine Datei 'content.xml'.");
             }//end if content!=null, d.h. "Datei" gefunden.
         }
         catch (IOException | JDOMException e) {
@@ -294,7 +296,7 @@ public class OfficeSearchZZZ{
                                 if (s.contains(p)) {
                                     if (!found) {
                                         found = true;
-                                        System.out.println("\n" + odt.toString());
+                                        System.out.println("\n" + odt.getName().toString());
                                     }
                                     System.out.println(e.getValue());
                                 }
